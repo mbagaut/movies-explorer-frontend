@@ -1,0 +1,160 @@
+.about-project {
+  box-sizing: border-box;
+  height: 608px;
+  padding: 110px 70px 100px;
+
+  background-color: rgba(32, 32, 32, 1);
+}
+
+@media (max-width: 768px) {
+  .about-project {
+    height: 585px;
+    padding: 90px 50px 80px;
+  }
+}
+
+@media (max-width: 500px) {
+  .about-project {
+    height: 641px;
+    padding: 70px 18px 60px;
+  }
+}
+
+.about-project__columns {
+  display: flex;
+  margin-bottom: 110px;
+  padding-top: 70px;
+
+  gap: 40px;
+}
+
+@media (max-width: 768px) {
+  .about-project__columns {
+    margin-bottom: 93px;
+
+    gap: 30px;
+  }
+}
+
+@media (max-width: 500px) {
+  .about-project__columns {
+    flex-direction: column;
+    margin-bottom: 60px;
+    padding-top: 60px;
+
+    gap: 56px;
+  }
+}
+
+.about-project__column {
+}
+
+.about-project__column-title {
+  margin: 0;
+  margin-bottom: 26px;
+
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 24.2px;
+  letter-spacing: -0.04em;
+}
+
+@media (max-width: 768px) {
+  .about-project__column-title {
+    margin-bottom: 22px;
+  }
+}
+
+@media (max-width: 500px) {
+  .about-project__column-title {
+    margin-bottom: 16px;
+
+    font-size: 18px;
+    line-height: 22px;
+  }
+}
+
+.about-project__column-text {
+  max-width: 550px;
+  margin: 0;
+
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 1.43;
+}
+
+@media (max-width: 768px) {
+  .about-project__column-text {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+}
+
+@media (max-width: 320px) {
+  .about-project__column-text {
+    font-size: 11px;
+    line-height: 1.45;
+  }
+}
+
+.about-project__grid {
+  display: grid;
+  align-items: center;
+
+  grid-template-columns: 20% 1fr;
+  grid-template-rows: 36px 36px;
+  justify-items: center;
+}
+
+@media (max-width: 768px) {
+  .about-project__grid {
+    grid-template-columns: 20.96% 1fr;
+  }
+}
+
+@media (max-width: 500px) {
+  .about-project__grid {
+    grid-template-columns: 35.212% 1fr;
+    grid-template-rows: 35px 35px;
+  }
+}
+
+.about-project__cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.21;
+  color: rgba(139, 139, 139, 1);
+}
+
+@media (max-width: 768px) {
+  .about-project__cell {
+    font-weight: normal;
+  }
+}
+
+@media (max-width: 500px) {
+  .about-project__cell {
+    font-size: 11px;
+    line-height: 13px;
+  }
+}
+
+.about-project__cell_color_green {
+  font-weight: normal;
+  color: black;
+
+  background-color: rgba(61, 220, 132, 1);
+}
+
+.about-project__cell_color_grey {
+  font-weight: normal;
+  color: white;
+
+  background-color: rgba(48, 48, 48, 1);
+}
