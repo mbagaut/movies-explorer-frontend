@@ -1,39 +1,16 @@
 import React from "react";
-
-import film1 from "../../images/2film.png";
-import film2 from "../../images/3film.png";
-import film3 from "../../images/4film.png";
-import film4 from "../../images/5film.png";
-
 import MoviesCard from "../MoviesCard/MoviesCard";
 
-const movies = [
-  { image: film1, name: "Фильм1", duration: 200 },
-  { image: film2, name: "Фильм2", duration: 300 },
-  { image: film3, name: "Фильм3", duration: 400 },
-  { image: film4, name: "Фильм4", duration: 500 },
-  { image: film1, name: "Фильм1", duration: 200 },
-  { image: film2, name: "Фильм2", duration: 300 },
-  { image: film3, name: "Фильм3", duration: 400 },
-  { image: film4, name: "Фильм4", duration: 500 },
-  { image: film1, name: "Фильм1", duration: 200 },
-  { image: film2, name: "Фильм2", duration: 300 },
-  { image: film3, name: "Фильм3", duration: 400 },
-  { image: film4, name: "Фильм4", duration: 500 },
-  { image: film1, name: "Фильм1", duration: 200 },
-  { image: film2, name: "Фильм2", duration: 300 },
-  { image: film3, name: "Фильм3", duration: 400 },
-  { image: film4, name: "Фильм4", duration: 500 },
-  { image: film1, name: "Фильм1", duration: 200 },
-  { image: film2, name: "Фильм2", duration: 300 },
-  { image: film3, name: "Фильм3", duration: 400 },
-  { image: film4, name: "Фильм4", duration: 500 },
-];
-
 function MoviesCardList(props) {
-  const { currentPage } = props;
+  const { currentPage, moviesList, keyForSeachingMovie } = props;
   const [cardsInRow, setCardsInRow] = React.useState(4);
   const [currentRow, setCurrentRow] = React.useState(2);
+
+  const movies = moviesList.filter(function (movie, position, array) {
+    return movie.nameRU
+      .toLowerCase()
+      .includes(keyForSeachingMovie.toLowerCase());
+  });
 
   function resize() {
     const currentWidthNav = window.innerWidth;

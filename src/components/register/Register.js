@@ -5,7 +5,7 @@ import FormInput from "../formInput/FormInput";
 import Authorization from "../authorization/Authorization";
 
 function Register(props) {
-  const { handleLogin } = props;
+  const { handleRegister } = props;
 
   const nameField = useFormWithValidation();
   const emailField = useFormWithValidation();
@@ -13,7 +13,7 @@ function Register(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    handleLogin(nameField.value, emailField.value, passwordField.value);
+    handleRegister(nameField.value, emailField.value, passwordField.value);
   };
 
   return (
@@ -35,28 +35,28 @@ function Register(props) {
         <FormInput
           field={nameField}
           labelName="Имя"
-          minlength="2"
+          minLength="2"
           inputName="name"
           type="text"
-          required="true"
+          required={true}
         />
 
         <FormInput
           field={emailField}
           labelName="E-mail"
-          minlength="2"
+          minLength="2"
           inputName="email"
           type="text"
-          required="true"
+          required={true}
         />
 
         <FormInput
           field={passwordField}
           labelName="Пароль"
-          minlength="2"
+          minLength="2"
           inputName="password"
           type="password"
-          required="true"
+          required={true}
         />
       </AuthorizationForm>
     </Authorization>

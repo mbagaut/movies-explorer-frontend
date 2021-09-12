@@ -32,19 +32,19 @@ function Login(props) {
         <FormInput
           field={emailField}
           labelName="E-mail"
-          minlength="2"
+          minLength="2"
           inputName="email"
           type="text"
-          required="true"
+          required={true}
         />
 
         <FormInput
           field={passwordField}
           labelName="Пароль"
-          minlength="2"
+          minLength="2"
           inputName="password"
           type="password"
-          required="true"
+          required={true}
         />
       </AuthorizationForm>
     </Authorization>

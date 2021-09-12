@@ -1,8 +1,9 @@
 import React from "react";
 
 function FormInput(props) {
-  const { field, labelName, minlength, maxlength, inputName, type, required } =
+  const { field, labelName, minLength, maxLength, inputName, type, required } =
     props;
+  const { errorMessage, isDirty, isValid, onBlur, onChange } = field;
 
   return (
     <div className="form-input">
@@ -10,19 +11,17 @@ function FormInput(props) {
         {labelName}
         <input
           className={`form-input__input ${
-            !field.isValid && field.isDirty && "form-input__input_error"
+            !isValid && isDirty && "form-input__input_error"
           }`}
           required={required}
-          minlength={minlength}
-          maxlength={maxlength}
+          minLength={minLength}
+          maxLength={maxLength}
           name={inputName}
           type={type}
-          onBlur={field.onBlur}
-          {...field}
+          onBlur={onBlur}
+          onChange={onChange}
         />
-        <span className="form-input__error">
-          {field.isDirty && field.errorMessage}
-        </span>
+        <span className="form-input__error">{isDirty && errorMessage}</span>
       </label>
     </div>
   );

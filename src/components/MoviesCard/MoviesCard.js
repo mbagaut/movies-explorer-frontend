@@ -1,11 +1,11 @@
 import React from "react";
-// import { CurrentUserContext } from "../contexts/CurrentUserContext";
+import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 
 function MoviesCard(props) {
   const { card, currentPage } = props;
-  const { image, name, duration } = card;
-  //   const { currentUser } = React.useContext(CurrentUserContext);
-  //   const isOwn = card.owner === currentUser._id;
+  const { image, nameRU, duration } = card;
+  const { currentUser } = React.useContext(CurrentUserContext);
+  const isOwn = card.owner === currentUser._id;
   //   const isLiked = card.likes.some((i) => i === currentUser._id);
 
   //   function handleClick() {
@@ -37,7 +37,7 @@ function MoviesCard(props) {
 
   return (
     <li className="movies-card">
-      <img src={image} alt={"Фильм"}></img>
+      <img src={`https://api.nomoreparties.co${image.url}`} alt={"Фильм"}></img>
       <button
         onClick={toggleSavedMovieState}
         className={`movies-card__button ${
@@ -50,7 +50,7 @@ function MoviesCard(props) {
         {!movieSaved && "Сохранить"}
       </button>
       <div className="movies-card__about-movie">
-        <span className="movies-card__name">{name}</span>
+        <span className="movies-card__name">{nameRU}</span>
         <span className="movies-card__duration">
           {getTimeFromMins(duration)}
         </span>
