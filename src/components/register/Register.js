@@ -44,6 +44,7 @@ function Register(props) {
           inputName="name"
           type="text"
           required={true}
+          pattern="[а-яА-Яa-zA-ZёË\- ]{1,}"
           setAuthorizationErrorMessage={setAuthorizationErrorMessage}
         />
 

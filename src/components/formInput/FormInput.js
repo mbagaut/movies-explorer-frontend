@@ -10,6 +10,7 @@ function FormInput(props) {
     type,
     required,
     setAuthorizationErrorMessage,
+    pattern,
   } = props;
   const { errorMessage, isDirty, isValid, onBlur, onChange } = field;
 
@@ -35,6 +36,7 @@ function FormInput(props) {
           type={type}
           onBlur={onBlur}
           onChange={checkErrorsOnChange}
+          pattern={pattern}
         />
         <span className="form-input__error">{isDirty && errorMessage}</span>
       </label>

@@ -8,7 +8,17 @@ export const useFormWithValidation = () => {
 
   const onChange = useCallback((evt) => {
     setValue(evt.target.value);
-    setErrorMessage(evt.target.validationMessage);
+    if (
+      evt.target.name === "name" &&
+      evt.target.validationMessage ===
+        "Пожалуйста, используйте требуемый формат."
+    ) {
+      setErrorMessage(
+        `Пожалуйста, используйте латиницу, кириллицу, пробелы и дефисы`
+      );
+    } else {
+      setErrorMessage(evt.target.validationMessage);
+    }
     setIsValid(evt.target.validity.valid);
   }, []);
 

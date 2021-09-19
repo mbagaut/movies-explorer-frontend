@@ -91,10 +91,9 @@ function App(props) {
           const { user } = res;
           setLoggedIn(true);
           setCurrentUser(user);
-          history.push(location.pathname);
-          // if (existingPage) {
-          //   history.push("/");
-          // }
+          if (existingPage) {
+            history.push("/");
+          }
         } else {
           throw new Error(res.message);
         }
