@@ -1,7 +1,7 @@
 import React from "react";
 import FilterCheckbox from "../filterCheckbox/FilterCheckbox";
 
-function SearchForm({ setKeyForSeachingMovie }) {
+function SearchForm({ setKeyForSeachingMovie, setCheckboxOn, checkboxOn }) {
   const [key, setKey] = React.useState("");
 
   const handleChange = (e) => {
@@ -31,7 +31,7 @@ function SearchForm({ setKeyForSeachingMovie }) {
 
         <button type="submit" className="search-form__button"></button>
       </form>
-      <FilterCheckbox />
+      <FilterCheckbox setCheckboxOn={setCheckboxOn} checkboxOn={checkboxOn} />
       <div className="search-form__decor-line"></div>
     </section>
   );

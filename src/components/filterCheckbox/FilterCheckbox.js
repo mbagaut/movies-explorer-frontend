@@ -1,7 +1,6 @@
 import React from "react";
 
-function FilterCheckbox() {
-  const [checkboxOn, setCheckboxOn] = React.useState(false);
+function FilterCheckbox({ checkboxOn, setCheckboxOn }) {
   function toggleCheckbox() {
     if (checkboxOn) {
       setCheckboxOn(false);
@@ -9,7 +8,6 @@ function FilterCheckbox() {
       setCheckboxOn(true);
     }
   }
-
   return (
     <form action="#" className="checkbox">
       <div

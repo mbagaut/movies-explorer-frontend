@@ -16,6 +16,7 @@
   padding: 0;
 
   border: none;
+  flex-grow: 1;
 }
 
 .authorization-form__button {
@@ -60,4 +61,14 @@
     font-size: 12px;
     line-height: 1.25;
   }
+}
+
+.authorization-form__error {
+  max-width: 410px;
+  margin-bottom: 20px;
+
+  font-size: 11px;
+  line-height: 13px;
+  color: rgba(238, 52, 101, 1);
+  text-align: center;
 }

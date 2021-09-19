@@ -12,10 +12,9 @@ import Login from "./login/Login";
 import Profile from "./profile/Propfile";
 import PageNotFound from "./pageNotFound/PageNotFound";
 import "./App.css";
-import Preloader from "./preloader/Preloader";
 
 import { mainApi } from "../utils/MainApi";
-import { moviesApi } from "../utils/MoviesApi";
+
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import * as auth from "../utils/auth.js";
 
@@ -32,6 +31,8 @@ function App(props) {
 
   // Имитирует состояние загрузки
   const [isLoading, setIsLoading] = React.useState(false);
+
+  const [checkboxOn, setCheckboxOn] = React.useState(false);
 
   // записываем объект, возвращаемый хуком, в переменную
   const aboutProject = React.useRef();
@@ -67,13 +68,21 @@ function App(props) {
     currentPath === "/movies" ||
     currentPath === "/saved-movies";
 
+  const existingPage =
+    currentPath === "/" ||
+    currentPath === "/profile" ||
+    currentPath === "/sign-up" ||
+    currentPath === "/sign-in" ||
+    currentPath === "/movies" ||
+    currentPath === "/saved-movies";
+
   function getItemFromLocalStorage(item) {
     if (localStorage.getItem(item)) {
       return localStorage.getItem(item);
     }
   }
 
-  function tokenCheck() {
+  function checkToken() {
     const jwt = getItemFromLocalStorage("jwt");
     auth
       .authorize(jwt)
@@ -82,53 +91,45 @@ function App(props) {
           const { user } = res;
           setLoggedIn(true);
           setCurrentUser(user);
-          history.push("/");
+          history.push(location.pathname);
+          // if (existingPage) {
+          //   history.push("/");
+          // }
+        } else {
+          throw new Error(res.message);
         }
       })
-      .catch((err) => console.log(`АЛЯРМ!: ${err}`));
+      .catch((err) => console.log(err));
   }
 
   React.useEffect(() => {
-    tokenCheck();
+    checkToken();
+    getSavedMovies();
   }, []);
-
-  const [moviesList, setMoviesList] = React.useState([]);
-
-  React.useEffect(() => {
-    if (loggedIn === true) {
-      moviesApi
-        .getMoviesList()
-        .then((moviesData) => {
-          setMoviesList(moviesData);
-        })
-        .catch((err) => console.log(err));
-    } else {
-      setMoviesList([]);
-    }
-  }, [loggedIn]);
-
-  console.log(moviesList);
 
   const handleRegister = (name, email, password) => {
     auth
       .register(name, email, password)
       .then((res) => {
         if (res._id) {
-          // setInfoTooltip("success");
-          console.log("success");
-          history.push("/sign-in");
+          handleLogin(email, password);
         } else {
           console.log(res);
           if (res.message === "Validation failed") {
+            if (
+              res.validation.body.message === '"email" must be a valid email'
+            ) {
+              setAuthorizationErrorMessage("Неправильный формат почты");
+              throw new Error(res.validation.body.message);
+            }
+            setAuthorizationErrorMessage(res.validation.body.message);
             throw new Error(res.validation.body.message);
           }
+          setAuthorizationErrorMessage(res.message);
           throw new Error(res.message);
         }
       })
-      .catch((err) => {
-        // setInfoTooltip("fail");
-        console.log(err);
-      });
+      .catch((err) => console.log(err));
   };
 
   const handleLogin = (password, email) => {
@@ -138,22 +139,24 @@ function App(props) {
         if (res.token) {
           const { token } = res;
           localStorage.setItem("jwt", token);
-          tokenCheck();
+          checkToken();
         } else {
           if (res.message === "Validation failed") {
+            setAuthorizationErrorMessage("Неправильные почта или пароль");
             throw new Error(res.validation.body.message);
           }
+          setAuthorizationErrorMessage(res.message);
           throw new Error(res.message);
         }
       })
-      .catch((err) => {
-        // setInfoTooltip("fail");
-        console.log(`АЛЯРМ!: ${err}`);
-      });
+      .catch((err) => console.log(err));
   };
 
   const [profileEditing, setProfileEditing] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState("");
+  const [tokenErrorMessage, setTokenErrorMessage] = React.useState("");
+  const [authorizationErrorMessage, setAuthorizationErrorMessage] =
+    React.useState("");
 
   const toggleProfileEditing = () => {
     if (profileEditing === true) {
@@ -168,22 +171,31 @@ function App(props) {
     const jwt = getItemFromLocalStorage("jwt");
     mainApi
       .changeUserInfo(jwt, formValues)
+      .then((res) => {
+        if (res.name) {
+          return res;
+        } else {
+          if (res.message === "Validation failed") {
+            setErrorMessage("Обе строки должны быть заполнены");
+            throw new Error(res.validation.body.message);
+          } else {
+            setErrorMessage(
+              `При обновлении профиля произошла ошибка:
+              ${res.message}`
+            );
+            throw new Error(res.message);
+          }
+        }
+      })
       .then((userData) => {
         setCurrentUser(userData);
         setButtonText("Сохранить");
         toggleProfileEditing();
+        setErrorMessage("");
       })
-      .catch((err) => {
-        // console.log(err);
-        if (err.message === "Validation failed") {
-          setErrorMessage("Обе строки должны быть заполнены");
-        } else {
-          setErrorMessage("При обновлении профиля произошла ошибка");
-        }
-      })
+      .catch((err) => console.log(err))
       .finally(() => {
         setButtonText("Сохранить");
-        setErrorMessage("");
       });
   }
 
@@ -192,12 +204,87 @@ function App(props) {
     setLoggedIn(false);
   };
 
-  const [keyForSeachingMovie, setKeyForSeachingMovie] = React.useState("без");
+  const [keyForSeachingMovie, setKeyForSeachingMovie] = React.useState("");
+
+  const [likedMovies, setLikedMovies] = React.useState([]);
+  const [likedMoviesId, setLikedMoviesId] = React.useState([]);
+
+  const RegExp =
+    /^((ftp|http|https):\/\/)?(www\.)?([A-Za-zА-Яа-я0-9]{1}[A-Za-zА-Яа-я0-9\-]*\.?)*\.{1}[A-Za-zА-Яа-я0-9-]{2,8}(\/([\w#!:.?+=&%@!\-\/])*)?/;
+
+  const handleMovieLike = (card) => {
+    const jwt = getItemFromLocalStorage("jwt");
+    const {
+      country,
+      director,
+      duration,
+      year,
+      description,
+      image,
+      trailerLink,
+      nameRU,
+      nameEN,
+      id,
+    } = card;
+
+    mainApi
+      .saveMovie(
+        jwt,
+        country ? country : "Нет",
+        director ? director : "Нет",
+        duration ? duration : 0,
+        year ? year : 0,
+        description ? description : "Нет",
+        `https://api.nomoreparties.co${image.url}`,
+        RegExp.test(trailerLink)
+          ? trailerLink
+          : "https://movies-explorer.maratb.nomoredomains.monster/pageNotFound",
+        nameRU ? nameRU : "",
+        nameEN ? nameEN : "",
+        `https://api.nomoreparties.co${image.formats.thumbnail.url}`,
+        id
+      )
+      .then((savedMovie) => {
+        setLikedMovies([...likedMovies, savedMovie]);
+        setLikedMoviesId([...likedMoviesId, savedMovie.movieId]);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const getSavedMovies = () => {
+    const jwt = getItemFromLocalStorage("jwt");
+    mainApi
+      .getSavedMovies(jwt)
+      .then((savedMovies) => {
+        const moviesId = savedMovies.map((movie) => {
+          return movie.movieId;
+        });
+        setLikedMovies(savedMovies);
+        setLikedMoviesId(moviesId);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const handleMovieDelete = (id) => {
+    const jwt = getItemFromLocalStorage("jwt");
+    mainApi
+      .deleteMovie(jwt, id)
+      .then((deletedMovie) => {
+        setLikedMovies(
+          likedMovies.filter(
+            (movie) => movie.movieId !== deletedMovie.data.movieId
+          )
+        );
+        setLikedMoviesId(
+          likedMoviesId.filter((id) => id !== deletedMovie.data.movieId)
+        );
+      })
+      .catch((err) => console.log(err));
+  };
 
   return (
     <CurrentUserContext.Provider value={{ currentUser }}>
       <div className="App">
-        {isLoading && <Preloader />}
         {headerRender && (
           <Header
             openMenu={openMenu}
@@ -210,9 +297,16 @@ function App(props) {
             path="/movies"
             loggedIn={loggedIn}
             component={Movies}
-            moviesList={moviesList}
             setKeyForSeachingMovie={setKeyForSeachingMovie}
             keyForSeachingMovie={keyForSeachingMovie}
+            setCheckboxOn={setCheckboxOn}
+            checkboxOn={checkboxOn}
+            isLoading={isLoading}
+            setIsLoading={setIsLoading}
+            handleMovieLike={handleMovieLike}
+            likedMoviesId={likedMoviesId}
+            likedMovies={likedMovies}
+            handleMovieDelete={handleMovieDelete}
           />
 
           <ProtectedRoute
@@ -221,6 +315,12 @@ function App(props) {
             component={SavedMovies}
             setKeyForSeachingMovie={setKeyForSeachingMovie}
             keyForSeachingMovie={keyForSeachingMovie}
+            setCheckboxOn={setCheckboxOn}
+            checkboxOn={checkboxOn}
+            handleMovieLike={handleMovieLike}
+            likedMoviesId={likedMoviesId}
+            likedMovies={likedMovies}
+            handleMovieDelete={handleMovieDelete}
           />
 
           <ProtectedRoute
@@ -233,14 +333,25 @@ function App(props) {
             profileEditing={profileEditing}
             toggleProfileEditing={toggleProfileEditing}
             errorMessage={errorMessage}
+            setErrorMessage={setErrorMessage}
           />
 
           <Route path="/sign-up">
-            <Register handleRegister={handleRegister} />
+            <Register
+              handleRegister={handleRegister}
+              authorizationErrorMessage={authorizationErrorMessage}
+              setAuthorizationErrorMessage={setAuthorizationErrorMessage}
+            />
           </Route>
 
           <Route path="/sign-in">
-            <Login handleLogin={handleLogin} />
+            <Login
+              handleLogin={handleLogin}
+              authorizationErrorMessage={authorizationErrorMessage}
+              setAuthorizationErrorMessage={setAuthorizationErrorMessage}
+              tokenErrorMessage={tokenErrorMessage}
+              setTokenErrorMessage={setTokenErrorMessage}
+            />
           </Route>
 
           <Route exact path="/">

@@ -6,39 +6,18 @@ class MainApi {
 
   //Шаблон запроса
   _sendRequest(path, parameters) {
-    return fetch(`${this._url}/${path}`, parameters).then((res) =>
-      res.ok ? res.json() : Promise.reject(res)
-    );
+    return fetch(`${this._url}/${path}`, parameters).then((res) => {
+      return res.json();
+    });
   }
 
-  getCardList(token) {
-    return this._sendRequest(`cards`, {
+  getSavedMovies(token) {
+    return this._sendRequest(`movies`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-    });
-  }
-
-  //getUserInfo() {
-  //  return this._sendRequest(`users/me`, {
-  //    method: "GET",
-  //    headers: this._headers,
-  //  });
-  //}
-
-  postCard(token, name, link) {
-    return this._sendRequest(`cards`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: name,
-        link: link,
-      }),
     });
   }
 
@@ -56,61 +35,44 @@ class MainApi {
     });
   }
 
-  changeAvatar(token, avatarLink) {
-    return this._sendRequest(`users/me/avatar`, {
-      method: "PATCH",
+  saveMovie(
+    token,
+    country,
+    director,
+    duration,
+    year,
+    description,
+    image,
+    trailer,
+    nameRU,
+    nameEN,
+    thumbnail,
+    movieId
+  ) {
+    return this._sendRequest(`movies`, {
+      method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        avatar: avatarLink,
+        country,
+        director,
+        duration,
+        year,
+        description,
+        image,
+        trailer,
+        nameRU,
+        nameEN,
+        thumbnail,
+        movieId,
       }),
     });
   }
 
-  changeLikeCardStatus(token, id, notLikedYet) {
-    if (notLikedYet) {
-      return this._sendRequest(`cards/${id}/likes`, {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-    } else {
-      return this._sendRequest(`cards/${id}/likes`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-    }
-  }
-
-  //  putLike(token, id) {
-  //    return this._sendRequest(`cards/likes/${id}`, {
-  //      method: "PUT",
-  //      headers: {
-  //        Authorization: `Bearer ${token}`,
-  //        "Content-Type": "application/json",
-  //      },
-  //    });
-  //  }
-
-  //  deleteLike(token, id) {
-  //    return this._sendRequest(`cards/likes/${id}`, {
-  //      method: "DELETE",
-  //      headers: {
-  //        Authorization: `Bearer ${token}`,
-  //        "Content-Type": "application/json",
-  //      },
-  //    });
-  //  }
-
-  deleteCard(token, id) {
-    return this._sendRequest(`cards/${id}`, {
+  deleteMovie(token, movieId) {
+    return this._sendRequest(`movies/${movieId}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,

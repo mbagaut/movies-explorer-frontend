@@ -2,15 +2,43 @@ import React from "react";
 import MoviesCard from "../MoviesCard/MoviesCard";
 
 function MoviesCardList(props) {
-  const { currentPage, moviesList, keyForSeachingMovie } = props;
-  const [cardsInRow, setCardsInRow] = React.useState(4);
-  const [currentRow, setCurrentRow] = React.useState(2);
+  const {
+    currentPageSavedMovies,
+    currentMoviesList,
+    cardsInRow,
+    currentRow,
+    cardsToRender,
+    setCardsInRow,
+    setCurrentRow,
+    handleMovieLike,
+    handleMovieDelete,
+    likedMoviesId,
+    likedMovies,
+  } = props;
 
-  const movies = moviesList.filter(function (movie, position, array) {
-    return movie.nameRU
-      .toLowerCase()
-      .includes(keyForSeachingMovie.toLowerCase());
-  });
+  const [elseButtonDisplayed, setElseButtonDisplayed] = React.useState(0);
+
+  function toggleBtnState() {
+    if (currentRow * cardsInRow < currentMoviesList.length) {
+      setElseButtonDisplayed(true);
+    } else {
+      setElseButtonDisplayed(false);
+    }
+  }
+
+  React.useEffect(() => {
+    toggleBtnState();
+  }, [currentMoviesList, currentRow, cardsInRow]);
+
+  function handleButtonClick() {
+    const currentWidthNav = window.innerWidth;
+    if (currentWidthNav < 768) {
+      setCurrentRow(currentRow + 2);
+    } else {
+      setCurrentRow(currentRow + 1);
+      toggleBtnState();
+    }
+  }
 
   function resize() {
     const currentWidthNav = window.innerWidth;
@@ -28,14 +56,10 @@ function MoviesCardList(props) {
       setCurrentRow(5);
     }
 
-    if (currentRow * cardsInRow + cardsInRow >= movies.length) {
-      setElseButtonDisplayed(false);
-    } else {
-      setElseButtonDisplayed(true);
-    }
+    toggleBtnState();
   }
 
-  React.useEffect(() => resize(), []);
+  React.useEffect(() => setTimeout(() => resize(), 2000), []);
   React.useEffect(() => {
     window.addEventListener("resize", resize);
 
@@ -44,35 +68,23 @@ function MoviesCardList(props) {
     };
   }, []);
 
-  const cardsToRender = movies.slice(0, currentRow * cardsInRow);
-
-  const [elseButtonDisplayed, setElseButtonDisplayed] = React.useState(true);
-
-  function toggleBtnState() {
-    setCurrentRow(currentRow + 1);
-    if (currentRow * cardsInRow + cardsInRow >= movies.length) {
-      setElseButtonDisplayed(false);
-    } else {
-      setElseButtonDisplayed(true);
-    }
-  }
-
   return (
     <section className="movies-cardlist">
       <ul className="movies-cardlist__grid">
         {cardsToRender.map((card) => (
           <MoviesCard
-            key={card._id}
+            key={currentPageSavedMovies ? card._id : card.id}
             card={card}
-            currentPage={currentPage}
-            // onCardClick={onCardClick}
-            // onCardDelIconClick={onCardDelIconClick}
-            // onCardLike={onCardLike}
+            currentPageSavedMovies={currentPageSavedMovies}
+            handleMovieLike={handleMovieLike}
+            handleMovieDelete={handleMovieDelete}
+            likedMovies={likedMovies}
+            movieIsSaved={likedMoviesId.includes(card.id || card.movieId)}
           />
         ))}
       </ul>
       {elseButtonDisplayed && (
-        <button onClick={toggleBtnState} className="movies-cardlist__button">
+        <button onClick={handleButtonClick} className="movies-cardlist__button">
           Ещё
         </button>
       )}

@@ -1,0 +1,13 @@
+.not-found-message {
+  display: none;
+  font-size: 13px;
+  line-height: 1.23;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.not-found-message_status_active {
+  display: block;
+}

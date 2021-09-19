@@ -5,7 +5,11 @@ import FormInput from "../formInput/FormInput";
 import Authorization from "../authorization/Authorization";
 
 function Login(props) {
-  const { handleLogin } = props;
+  const {
+    handleLogin,
+    authorizationErrorMessage,
+    setAuthorizationErrorMessage,
+  } = props;
 
   const emailField = useFormWithValidation();
   const passwordField = useFormWithValidation();
@@ -28,6 +32,7 @@ function Login(props) {
         submitButtonText="Войти"
         isFormValid={emailField.isValid && passwordField.isValid}
         handleSubmit={handleSubmit}
+        authorizationErrorMessage={authorizationErrorMessage}
       >
         <FormInput
           field={emailField}
@@ -36,6 +41,7 @@ function Login(props) {
           inputName="email"
           type="text"
           required={true}
+          setAuthorizationErrorMessage={setAuthorizationErrorMessage}
         />
 
         <FormInput
@@ -45,6 +51,7 @@ function Login(props) {
           inputName="password"
           type="password"
           required={true}
+          setAuthorizationErrorMessage={setAuthorizationErrorMessage}
         />
       </AuthorizationForm>
     </Authorization>

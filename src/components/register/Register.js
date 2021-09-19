@@ -5,7 +5,11 @@ import FormInput from "../formInput/FormInput";
 import Authorization from "../authorization/Authorization";
 
 function Register(props) {
-  const { handleRegister } = props;
+  const {
+    handleRegister,
+    authorizationErrorMessage,
+    setAuthorizationErrorMessage,
+  } = props;
 
   const nameField = useFormWithValidation();
   const emailField = useFormWithValidation();
@@ -31,6 +35,7 @@ function Register(props) {
           nameField.isValid && emailField.isValid && passwordField.isValid
         }
         handleSubmit={handleSubmit}
+        authorizationErrorMessage={authorizationErrorMessage}
       >
         <FormInput
           field={nameField}
@@ -39,6 +44,7 @@ function Register(props) {
           inputName="name"
           type="text"
           required={true}
+          setAuthorizationErrorMessage={setAuthorizationErrorMessage}
         />
 
         <FormInput
@@ -48,6 +54,7 @@ function Register(props) {
           inputName="email"
           type="text"
           required={true}
+          setAuthorizationErrorMessage={setAuthorizationErrorMessage}
         />
 
         <FormInput
@@ -57,6 +64,7 @@ function Register(props) {
           inputName="password"
           type="password"
           required={true}
+          setAuthorizationErrorMessage={setAuthorizationErrorMessage}
         />
       </AuthorizationForm>
     </Authorization>

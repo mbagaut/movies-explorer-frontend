@@ -1,31 +1,28 @@
 import React from "react";
-import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 
 function MoviesCard(props) {
-  const { card, currentPage } = props;
-  const { image, nameRU, duration } = card;
-  const { currentUser } = React.useContext(CurrentUserContext);
-  const isOwn = card.owner === currentUser._id;
-  //   const isLiked = card.likes.some((i) => i === currentUser._id);
+  const {
+    card,
+    currentPageSavedMovies,
+    handleMovieLike,
+    handleMovieDelete,
+    likedMovies,
+    movieIsSaved,
+  } = props;
 
-  //   function handleClick() {
-  //     onCardClick(card);
-  //   }
+  const { image, nameRU, duration, trailerLink, trailer } = card;
 
-  //   function handleLikeClick() {
-  //     onCardLike(card);
-  //   }
-
-  //   function handleCardDelete() {
-  //     onCardDelIconClick(card);
-  //   }
-
-  const [movieSaved, setMovieSaved] = React.useState(false);
-  function toggleSavedMovieState() {
-    if (movieSaved) {
-      setMovieSaved(false);
+  function toggleCardClick() {
+    if (movieIsSaved) {
+      const currentCardId = likedMovies.find((movie) => {
+        if (currentPageSavedMovies) {
+          return movie.movieId === card.movieId;
+        }
+        return movie.movieId === card.id;
+      });
+      handleMovieDelete(currentCardId._id);
     } else {
-      setMovieSaved(true);
+      handleMovieLike(card);
     }
   }
 
@@ -35,19 +32,52 @@ function MoviesCard(props) {
     return `${hours}ч ${minutes}м`;
   }
 
-  return (
+  return currentPageSavedMovies ? (
+    movieIsSaved && (
+      <li className="movies-card">
+        <a
+          className="movies-card__link"
+          href={trailer}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img className="movies-card__img" src={image} alt={"Фильм"}></img>
+        </a>
+        <button
+          onClick={toggleCardClick}
+          className={`movies-card__button ${
+            movieIsSaved && "movies-card__button_icon_del"
+          }`}
+        ></button>
+        <div className="movies-card__about-movie">
+          <span className="movies-card__name">{nameRU}</span>
+          <span className="movies-card__duration">
+            {getTimeFromMins(duration)}
+          </span>
+        </div>
+      </li>
+    )
+  ) : (
     <li className="movies-card">
-      <img src={`https://api.nomoreparties.co${image.url}`} alt={"Фильм"}></img>
+      <a
+        className="movies-card__link"
+        href={trailerLink}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <img
+          className="movies-card__img"
+          src={`https://api.nomoreparties.co${image.url}`}
+          alt={"Фильм"}
+        ></img>
+      </a>
       <button
-        onClick={toggleSavedMovieState}
+        onClick={toggleCardClick}
         className={`movies-card__button ${
-          movieSaved &&
-          (currentPage !== "SavedMovies"
-            ? "movies-card__button_icon_saved"
-            : "movies-card__button_icon_del")
+          movieIsSaved && "movies-card__button_icon_saved"
         }`}
       >
-        {!movieSaved && "Сохранить"}
+        {!movieIsSaved && "Сохранить"}
       </button>
       <div className="movies-card__about-movie">
         <span className="movies-card__name">{nameRU}</span>

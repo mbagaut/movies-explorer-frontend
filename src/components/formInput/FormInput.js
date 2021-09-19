@@ -1,9 +1,24 @@
 import React from "react";
 
 function FormInput(props) {
-  const { field, labelName, minLength, maxLength, inputName, type, required } =
-    props;
+  const {
+    field,
+    labelName,
+    minLength,
+    maxLength,
+    inputName,
+    type,
+    required,
+    setAuthorizationErrorMessage,
+  } = props;
   const { errorMessage, isDirty, isValid, onBlur, onChange } = field;
+
+  const checkErrorsOnChange = (e) => {
+    onChange(e);
+    if (setAuthorizationErrorMessage) {
+      setAuthorizationErrorMessage("");
+    }
+  };
 
   return (
     <div className="form-input">
@@ -19,7 +34,7 @@ function FormInput(props) {
           name={inputName}
           type={type}
           onBlur={onBlur}
-          onChange={onChange}
+          onChange={checkErrorsOnChange}
         />
         <span className="form-input__error">{isDirty && errorMessage}</span>
       </label>

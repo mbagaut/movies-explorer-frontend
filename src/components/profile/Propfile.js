@@ -10,23 +10,50 @@ function Profile(props) {
     toggleProfileEditing,
     profileEditing,
     errorMessage,
+    setErrorMessage,
   } = props;
   const { currentUser } = React.useContext(CurrentUserContext);
 
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
+  const [nameIsNotChanged, setNameIsNotChanged] = React.useState(true);
+  const [emailIsNotChanged, setEmailIsNotChanged] = React.useState(true);
 
   React.useEffect(() => {
     setName(currentUser.name);
     setEmail(currentUser.email);
+    setNameIsNotChanged(true);
+    setEmailIsNotChanged(true);
   }, [currentUser]);
+
+  React.useEffect(() => {
+    if (nameIsNotChanged && emailIsNotChanged) {
+      setErrorMessage("");
+    }
+  }, [handleChangeName, handleChangeEmail]);
 
   function handleChangeName(e) {
     setName(e.target.value);
+    if (e.target.value === currentUser.name) {
+      setNameIsNotChanged(true);
+    } else {
+      setNameIsNotChanged(false);
+    }
+    if (errorMessage) {
+      setErrorMessage("");
+    }
   }
 
   function handleChangeEmail(e) {
     setEmail(e.target.value);
+    if (e.target.value === currentUser.email) {
+      setEmailIsNotChanged(true);
+    } else {
+      setEmailIsNotChanged(false);
+    }
+    if (errorMessage) {
+      setErrorMessage("");
+    }
   }
 
   function handleSubmit(e) {
@@ -41,7 +68,7 @@ function Profile(props) {
   return (
     <section className="profile">
       <div className="profile__inner">
-        <h1 className="profile__title">{`Привет, ${name}!`}</h1>
+        <h1 className="profile__title">{`Привет, ${currentUser.name}!`}</h1>
 
         <form className="profile__form" method="POST" onSubmit={handleSubmit}>
           <fieldset className="profile__fieldset">
@@ -52,6 +79,8 @@ function Profile(props) {
                 disabled={!profileEditing}
                 value={name || ""}
                 onChange={handleChangeName}
+                minLength="2"
+                required={true}
               />
             </label>
             <span className="profile__decor-line"></span>
@@ -62,6 +91,8 @@ function Profile(props) {
                 disabled={!profileEditing}
                 value={email || ""}
                 onChange={handleChangeEmail}
+                minLength="2"
+                required={true}
               />
             </label>
           </fieldset>
@@ -71,12 +102,23 @@ function Profile(props) {
               <span className="profile__error">
                 {errorMessage ? errorMessage : ""}
               </span>
-              <button
-                type="submit"
-                className="profile__button profile__button_type_save"
-              >
-                {buttonText ? buttonText : "Сохранить"}
-              </button>
+              {nameIsNotChanged && emailIsNotChanged ? (
+                <button
+                  type="button"
+                  onClick={toggleProfileEditing}
+                  className={`profile__button profile__button_type_save`}
+                >
+                  Назад
+                </button>
+              ) : (
+                <button
+                  type="submit"
+                  disabled={nameIsNotChanged && emailIsNotChanged}
+                  className={`profile__button profile__button_type_save`}
+                >
+                  {buttonText ? buttonText : "Сохранить"}
+                </button>
+              )}
             </>
           )}
         </form>
@@ -91,7 +133,7 @@ function Profile(props) {
             </button>
             <Link
               className="profile__button profile__button_type_exit"
-              to="/sign-in"
+              to="/"
               onClick={logout}
             >
               Выйти из аккаунта
