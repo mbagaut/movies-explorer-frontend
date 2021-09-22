@@ -26,12 +26,8 @@ function App(props) {
   const [currentUser, setCurrentUser] = React.useState({});
   const [buttonText, setButtonText] = React.useState("");
 
-  // Имитирует состояние авторизации пользователя
   const [loggedIn, setLoggedIn] = React.useState(false);
-
-  // Имитирует состояние загрузки
   const [isLoading, setIsLoading] = React.useState(false);
-
   const [checkboxOn, setCheckboxOn] = React.useState(false);
 
   // записываем объект, возвращаемый хуком, в переменную
@@ -76,11 +72,26 @@ function App(props) {
     currentPath === "/movies" ||
     currentPath === "/saved-movies";
 
+  const regPage = currentPath === "/sign-up" || currentPath === "/sign-in";
+
   function getItemFromLocalStorage(item) {
     if (localStorage.getItem(item)) {
       return localStorage.getItem(item);
     }
   }
+
+  // Загружаем фильмы из локального хранилища
+  const getCurrentMovies = () => {
+    return JSON.parse(getItemFromLocalStorage("moviesData"));
+  };
+
+  const getSavedMoviesFromLocalStorage = () => {
+    return JSON.parse(getItemFromLocalStorage("savedMovies"));
+  };
+
+  const getSavedMoviesIdFromLocalStorage = () => {
+    return JSON.parse(getItemFromLocalStorage("savedMoviesId"));
+  };
 
   function checkToken() {
     const jwt = getItemFromLocalStorage("jwt");
@@ -91,8 +102,10 @@ function App(props) {
           const { user } = res;
           setLoggedIn(true);
           setCurrentUser(user);
-          if (existingPage) {
-            history.push("/");
+          if (regPage) {
+            history.push("/movies");
+          } else if (existingPage) {
+            history.push(currentPath);
           }
         } else {
           throw new Error(res.message);
@@ -172,6 +185,7 @@ function App(props) {
       .changeUserInfo(jwt, formValues)
       .then((res) => {
         if (res.name) {
+          alert("Профиль успешно изменен!");
           return res;
         } else {
           if (res.message === "Validation failed") {
@@ -246,6 +260,14 @@ function App(props) {
       .then((savedMovie) => {
         setLikedMovies([...likedMovies, savedMovie]);
         setLikedMoviesId([...likedMoviesId, savedMovie.movieId]);
+        localStorage.setItem(
+          "savedMovies",
+          JSON.stringify([...likedMovies, savedMovie])
+        );
+        localStorage.setItem(
+          "savedMoviesId",
+          JSON.stringify([...likedMoviesId, savedMovie.movieId])
+        );
       })
       .catch((err) => console.log(err));
   };
@@ -260,6 +282,8 @@ function App(props) {
         });
         setLikedMovies(savedMovies);
         setLikedMoviesId(moviesId);
+        localStorage.setItem("savedMovies", JSON.stringify(savedMovies));
+        localStorage.setItem("savedMoviesId", JSON.stringify(moviesId));
       })
       .catch((err) => console.log(err));
   };
@@ -276,6 +300,22 @@ function App(props) {
         );
         setLikedMoviesId(
           likedMoviesId.filter((id) => id !== deletedMovie.data.movieId)
+        );
+        localStorage.setItem(
+          "savedMovies",
+          JSON.stringify(
+            getSavedMoviesFromLocalStorage().filter(
+              (movie) => movie.movieId !== deletedMovie.data.movieId
+            )
+          )
+        );
+        localStorage.setItem(
+          "savedMoviesId",
+          JSON.stringify(
+            getSavedMoviesIdFromLocalStorage().filter(
+              (id) => id !== deletedMovie.data.movieId
+            )
+          )
         );
       })
       .catch((err) => console.log(err));
@@ -306,6 +346,7 @@ function App(props) {
             likedMoviesId={likedMoviesId}
             likedMovies={likedMovies}
             handleMovieDelete={handleMovieDelete}
+            getCurrentMovies={getCurrentMovies}
           />
 
           <ProtectedRoute
@@ -320,6 +361,9 @@ function App(props) {
             likedMoviesId={likedMoviesId}
             likedMovies={likedMovies}
             handleMovieDelete={handleMovieDelete}
+            getSavedMovies={getSavedMovies}
+            getSavedMoviesFromLocalStorage={getSavedMoviesFromLocalStorage}
+            getSavedMoviesIdFromLocalStorage={getSavedMoviesIdFromLocalStorage}
           />
 
           <ProtectedRoute

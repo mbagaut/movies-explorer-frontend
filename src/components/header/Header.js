@@ -25,7 +25,13 @@ function Header(props) {
     }
   }
 
-  window.addEventListener("resize", () => resize(768));
+  React.useEffect(() => {
+    window.addEventListener("resize", () => resize(768));
+
+    return () => {
+      window.removeEventListener("resize", resize(768));
+    };
+  });
 
   return (
     <header className={`header ${isItLanding && "header_color_landing"}`}>

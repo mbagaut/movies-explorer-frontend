@@ -53,7 +53,7 @@ function Register(props) {
           labelName="E-mail"
           minLength="2"
           inputName="email"
-          type="text"
+          type="email"
           required={true}
           setAuthorizationErrorMessage={setAuthorizationErrorMessage}
         />

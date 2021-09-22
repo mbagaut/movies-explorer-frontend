@@ -1,9 +1,9 @@
 import React from "react";
-import MoviesCardList from "../MoviesCardList/MoviesCardList";
-import SearchForm from "../SearchForm/SearchForm";
+import MoviesCardList from "../moviesCardList/MoviesCardList";
+import SearchForm from "../searchForm/SearchForm";
 import { moviesApi } from "../../utils/MoviesApi";
 import Preloader from "../preloader/Preloader";
-import MoviesNotFound from "../MoviesNotFound/MoviesNotFound";
+import MoviesNotFound from "../moviesNotFound/MoviesNotFound";
 
 function Movies(props) {
   const {
@@ -17,6 +17,7 @@ function Movies(props) {
     handleMovieDelete,
     likedMoviesId,
     likedMovies,
+    getCurrentMovies,
   } = props;
 
   const [moviesList, setMoviesList] = React.useState([]);
@@ -25,12 +26,6 @@ function Movies(props) {
   const [moviesIsFined, setMoviesIsFined] = React.useState(false);
   const [renderCounter, setRenderCounter] = React.useState(0);
   const [infoMessage, setInfoMessage] = React.useState("Ничего не найдено");
-
-  const getCurrentMovies = () => {
-    if (localStorage.getItem("moviesData")) {
-      return JSON.parse(localStorage.getItem("moviesData"));
-    }
-  };
 
   React.useEffect(() => {
     if (keyForSeachingMovie) {

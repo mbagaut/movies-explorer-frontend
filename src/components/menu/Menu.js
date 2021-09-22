@@ -11,17 +11,30 @@ function Menu(props) {
 
   const sensitivity = 50;
   React.useEffect(() => {
-    menu.current.addEventListener("touchstart", function (e) {
+    const currentMenu = menu.current;
+    currentMenu.addEventListener("touchstart", function (e) {
       TouchStart(e);
     }); // Начало касания
 
-    menu.current.addEventListener("touchmove", function (e) {
+    currentMenu.addEventListener("touchmove", function (e) {
       TouchMove(e);
     }); // Движение пальцем по экрану
 
-    menu.current.addEventListener("touchend", function (e) {
+    currentMenu.addEventListener("touchend", function (e) {
       TouchEnd(e);
     }); // Пользователь отпустил экран
+
+    return () => {
+      currentMenu.removeEventListener("touchstart", function (e) {
+        TouchStart(e);
+      });
+      currentMenu.removeEventListener("touchmove", function (e) {
+        TouchMove(e);
+      });
+      currentMenu.removeEventListener("touchend", function (e) {
+        TouchEnd(e);
+      });
+    };
   }, []);
 
   function TouchStart(e) {

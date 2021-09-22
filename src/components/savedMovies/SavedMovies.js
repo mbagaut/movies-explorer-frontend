@@ -1,7 +1,7 @@
 import React from "react";
-import MoviesCardList from "../MoviesCardList/MoviesCardList";
-import SearchForm from "../SearchForm/SearchForm";
-import MoviesNotFound from "../MoviesNotFound/MoviesNotFound";
+import MoviesCardList from "../moviesCardList/MoviesCardList";
+import SearchForm from "../searchForm/SearchForm";
+import MoviesNotFound from "../moviesNotFound/MoviesNotFound";
 
 function SavedMovies(props) {
   const {
@@ -13,6 +13,8 @@ function SavedMovies(props) {
     handleMovieDelete,
     likedMoviesId,
     likedMovies,
+    getSavedMoviesFromLocalStorage,
+    getSavedMoviesIdFromLocalStorage,
   } = props;
 
   const [moviesList, setMoviesList] = React.useState([]);
@@ -32,10 +34,12 @@ function SavedMovies(props) {
   }, []);
 
   React.useEffect(() => {
-    if (likedMovies) {
+    if (likedMovies.length > 0) {
       setMoviesList(likedMovies);
+    } else if (getSavedMoviesFromLocalStorage()) {
+      setMoviesList(getSavedMoviesFromLocalStorage());
     }
-  }, [keyForSeachingMovie]);
+  }, [keyForSeachingMovie, likedMovies, getSavedMoviesFromLocalStorage]);
 
   React.useEffect(() => {
     if (keyForSeachingMovie) {
@@ -90,8 +94,13 @@ function SavedMovies(props) {
             setCurrentRow={setCurrentRow}
             handleMovieLike={handleMovieLike}
             handleMovieDelete={handleMovieDelete}
-            likedMoviesId={likedMoviesId}
-            likedMovies={likedMovies}
+            likedMoviesId={
+              likedMoviesId > 0
+                ? likedMoviesId
+                : getSavedMoviesIdFromLocalStorage()
+            }
+            likedMovies={moviesList}
+            getSavedMoviesIdFromLocalStorage={getSavedMoviesIdFromLocalStorage}
           />
         ) : (
           <MoviesNotFound
