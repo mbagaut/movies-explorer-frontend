@@ -21,13 +21,13 @@
 @import url("./components/movies/Movies.css");
 @import url("./components/savedMovies/SavedMovies.css");
 
-@import url("./components/SearchForm/SearchForm.css");
+@import url("./components/searchForm/SearchForm.css");
 @import url("./components/filterCheckbox/FilterCheckbox.css");
 
-@import url("./components/MoviesCardList/MoviesCardList.css");
-@import url("./components/MoviesCard/MoviesCard.css");
+@import url("./components/moviesCardList/MoviesCardList.css");
+@import url("./components/moviesCard/MoviesCard.css");
 
-@import url("./components/MoviesNotFound/MoviesNotFound.css");
+@import url("./components/moviesNotFound/MoviesNotFound.css");
 
 /*----------------------- Блок Profile ------------------------------ */
 @import url("./components/profile/Profile.css");
