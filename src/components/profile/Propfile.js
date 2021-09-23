@@ -80,6 +80,7 @@ function Profile(props) {
                 value={name || ""}
                 onChange={handleChangeName}
                 minLength="2"
+                type="text"
                 required={true}
               />
             </label>
@@ -92,6 +93,7 @@ function Profile(props) {
                 value={email || ""}
                 onChange={handleChangeEmail}
                 minLength="2"
+                type="email"
                 required={true}
               />
             </label>
