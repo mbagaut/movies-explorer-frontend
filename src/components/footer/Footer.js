@@ -22,7 +22,7 @@ function Footer() {
         </li>
         <li className="footer__item">
           <a
-            href="https://github.com"
+            href="https://github.com/mbagaut"
             target="_blank"
             rel="noopener noreferrer"
             className="footer__link"
@@ -32,12 +32,12 @@ function Footer() {
         </li>
         <li className="footer__item">
           <a
-            href="https://ru-ru.facebook.com"
+            href="https://twitter.com/agaffirs"
             target="_blank"
             rel="noopener noreferrer"
             className="footer__link"
           >
-            Facebook
+            Twitter
           </a>
         </li>
       </ul>

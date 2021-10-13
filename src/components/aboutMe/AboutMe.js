@@ -8,29 +8,30 @@ function AboutMe(props) {
       <h2 className="main__title">Студент</h2>
       <div className="aboutme__profile">
         <div className="aboutme__content">
-          <p className="aboutme__name">Виталий</p>
-          <p className="aboutme__job">Фронтенд-разработчик, 30 лет</p>
+          <p className="aboutme__name">Марат</p>
+          <p className="aboutme__job">Фронтенд-разработчик, 31 год</p>
           <p className="aboutme__text">
-            Я родился и живу в Саратове, закончил факультет экономики СГУ. У
-            меня есть жена и дочь. Я люблю слушать музыку, а ещё увлекаюсь
-            бегом. Недавно начал кодить. С&nbsp;2015 года работал в компании
-            «СКБ Контур». После того, как прошёл курс по веб&#8209;разработке,
-            начал заниматься фриланс&#8209;заказами и ушёл с постоянной работы.
+            Я родился и живу в Москве, более 12 лет работал Product и Project
+            менеджером в разных сферах. Я счастливый муж и отец двух дочек.
+            Люблю слушать музыку, играю на музыкальных инструментах, учусь
+            писать книги. Недавно начал кодить. Прошёл курс по
+            веб&#8209;разработке от Яндекс.Практикума. Стараюсь развиваться в
+            новой для себя сфере деятельности.
           </p>
           <ul className="aboutme__links">
             <li>
               <a
-                href="https://ru-ru.facebook.com"
+                href="https://twitter.com/agaffirs"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="aboutme__link"
               >
-                Facebook
+                Twitter
               </a>
             </li>
             <li>
               <a
-                href="https://github.com"
+                href="https://github.com/mbagaut"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="aboutme__link"
