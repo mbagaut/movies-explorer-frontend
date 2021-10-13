@@ -1,0 +1,94 @@
+.search-form {
+  margin-bottom: 70px;
+  padding: 80px 70px 10px;
+}
+
+@media (max-width: 890px) {
+  .search-form {
+    padding: 80px 30px 10px;
+  }
+}
+
+@media (max-width: 400px) {
+  .search-form {
+    margin-bottom: 40px;
+    padding: 80px 14px 10px;
+  }
+}
+
+.search-form__search {
+  display: flex;
+  align-items: center;
+  margin-bottom: 28px;
+
+  gap: 10px;
+}
+
+@media (max-width: 768px) {
+  .search-form__search {
+    margin-bottom: 40px;
+  }
+}
+
+@media (max-width: 400px) {
+  .search-form__search {
+    margin-bottom: 46px;
+  }
+}
+
+.search-form__field {
+  flex-grow: 1;
+}
+
+.search-form__input-search {
+  box-sizing: border-box;
+  width: 100%;
+  height: 50px;
+  padding: 16px 20px;
+
+  font-size: 14px;
+  line-height: 1.29;
+  color: #8b8b8b;
+
+  background-color: rgba(47, 47, 47, 1);
+  border: 0;
+  border-radius: 8px;
+  outline: none;
+  box-shadow: none;
+}
+
+@media (max-width: 400px) {
+  .search-form__input-search {
+    padding: 13px;
+  }
+}
+
+.search-form__button {
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  padding: 0;
+
+  background-color: rgba(66, 133, 244, 1);
+  background-image: url(../../images/loupe-icon.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  opacity: 1;
+
+  -webkit-transition: all 0.3s ease 0.1s;
+  -o-transition: all 0.3s ease 0.1s;
+  transition: all 0.3s ease 0.1s;
+}
+
+.search-form__button:hover {
+  opacity: 0.8;
+}
+
+.search-form__decor-line {
+  height: 1px;
+
+  border-bottom: 1px solid rgba(66, 66, 66, 1);
+}

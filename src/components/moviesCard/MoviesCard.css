@@ -1,0 +1,165 @@
+.movies-card {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow: hidden;
+
+  list-style: none;
+
+  gap: 14px;
+}
+
+@media (max-width: 768px) {
+  .movies-card {
+    gap: 25px;
+  }
+}
+
+@media (max-width: 400px) {
+  .movies-card {
+    gap: 16px;
+  }
+}
+
+.movies-card__link {
+  display: block;
+  flex-grow: 1;
+  box-sizing: border-box;
+}
+
+.movies-card__img {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  max-height: 201px;
+
+  -webkit-transition: 0.3s ease;
+  -o-transition: 0.3s ease;
+  transition: 0.3s ease;
+
+  object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  .movies-card__img {
+    max-height: 190px;
+  }
+}
+
+@media (max-width: 400px) {
+  .movies-card__img {
+    max-height: 168px;
+  }
+}
+
+.movies-card__img:hover {
+  width: 105%;
+  height: 105%;
+
+  opacity: 0.7;
+}
+
+.movies-card__button {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+
+  width: 72px;
+  padding: 6.5px 0 7.5px;
+  overflow: hidden;
+
+  font-size: 10px;
+  line-height: 0.9;
+  color: white;
+
+  background-color: rgba(49, 49, 49, 1);
+  background-repeat: no-repeat;
+  background-position: center;
+  border: 0;
+  border-radius: 30px;
+  cursor: pointer;
+  opacity: 1;
+
+  -webkit-transition: all 0.3s ease 0.1s;
+  -o-transition: all 0.3s ease 0.1s;
+  transition: all 0.4s ease 0s;
+  transition: all 0.3s ease 0.1s;
+}
+
+.movies-card__button:hover {
+  opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+  .movies-card__button {
+    padding: 5.5px 0 6.5px;
+  }
+}
+
+@media (max-width: 400px) {
+  .movies-card__button {
+    top: 10px;
+    right: 10px;
+  }
+}
+
+.movies-card__button_icon_saved {
+  width: 21px;
+  height: 21px;
+  padding: 0;
+
+  background-color: rgba(238, 52, 101, 1);
+  background-image: url(../../images/tick-icon.svg);
+}
+
+.movies-card__button_icon_del {
+  width: 21px;
+  height: 21px;
+  padding: 0;
+
+  background-image: url(../../images/del-icon.svg);
+}
+
+.movies-card__about-movie {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 14px;
+}
+
+@media (max-width: 320px) {
+  .movies-card__about-movie {
+    padding: 0;
+  }
+}
+
+.movies-card__name {
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 1.23;
+  text-align: start;
+}
+
+@media (max-width: 320px) {
+  .movies-card__name {
+    font-size: 12px;
+    line-height: 1.25;
+  }
+}
+
+.movies-card__duration {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 52px;
+  height: 18px;
+
+  font-size: 11px;
+  line-height: 0.91;
+  color: rgba(139, 139, 139, 1);
+
+  background-color: rgba(47, 47, 47, 1);
+  border-radius: 3px;
+}
